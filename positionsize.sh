@@ -21,5 +21,3 @@ while getopts ":ls" opt; do
 done
 echo "scale=2; $risk/($entry+$stoporder)" | bc
 
-
-
