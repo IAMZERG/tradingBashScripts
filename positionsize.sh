@@ -3,7 +3,7 @@
 while getopts ":ls" opt; do
   case ${opt} in
     l )   #long trade
-      read -p "Risk size" risk
+      read -p "Risk size: " risk
       read -p "Entry (negative): " entry
       read -p "Stop (positive): " stoporder
       ;;
@@ -19,5 +19,5 @@ while getopts ":ls" opt; do
       ;;
   esac
 done
-echo "scale=2; $risk/($entry+$stoporder)" | bc
+echo "scale=2; $risk/($entry+$stoporder)*-1" | bc
 
