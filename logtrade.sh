@@ -1,6 +1,6 @@
 #!/bin/bash
 
-while getopts ":idh" opt; do
+while getopts ":idho" opt; do
   case ${opt} in
     i )
       read -p "Enter ticker (Syntax for option: AMD55C011623):  " ticker
@@ -18,6 +18,8 @@ while getopts ":idh" opt; do
       read -p  "Open date (MMDDYY):  " opendate
 
       read -p  "Close date (MMDDYY):  " closedate
+
+      read -p "Output file: " file
       ;;
     d )
       closedate=$(date '+%m%d%y')
@@ -38,6 +40,9 @@ while getopts ":idh" opt; do
       echo "    logtrade -i          Enter trade interactively"
       echo "    logtrade -d          Fills in open/close dates with today's date"
       exit 1
+      ;;
+    o )
+      echo "$ticker,$price,$shares,$loss,$profit,$close,$opendate,$closedate" >> $file
       ;;
       
     \? )
