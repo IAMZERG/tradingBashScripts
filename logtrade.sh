@@ -3,10 +3,11 @@
 while getopts ":idhov" opt; do
   case ${opt} in
     v )
-      zenity --question
+      zenity --question \
+        --text="Create new trade?"
         case $? in
           0)
-            zenity --forms --title="Create New Trade" \
+            trade=$(zenity --forms --title="Create New Trade" \
               --separator="," \
               --add-entry="Ticker" \
               --add-entry="Price" \
@@ -16,12 +17,19 @@ while getopts ":idhov" opt; do
               --add-calendar="Open Date" \
               --add-calendar="Close Date" \
               --add-entry="Closing Price" \
-              --add-entry="Modify existing record?"
+              --add-entry="Modify existing record?")
+            echo "$trade" >> ./test.csv
               ;;
-            1)
-              zenity --entry \
-                --title="Search query for trade to modify" \
-                --entry-text="$(date '+%m%d%y')"
+              
+          1)
+           zenity --entry \
+              --title="Search query for trade to modify" \
+              --entry-text="$(date '+%m%d%y')" query
+
+           lines=$(grep "$query" ./test.csv)
+            echo "lines: $lines"
+
+
               ;;
           esac
           ;;
@@ -76,5 +84,5 @@ while getopts ":idhov" opt; do
   esac
 done
 
-echo "$ticker,$price,$shares,$loss,$profit,$close,$opendate,$closedate"
+if [ -z  ${ticker+x} ]; then echo ""; else echo "$ticker,$price,$shares,$loss,$profit,$close,$opendate,$closedate"; fi
 
