@@ -1,7 +1,31 @@
 #!/bin/bash
 
-while getopts ":idho" opt; do
+while getopts ":idhov" opt; do
   case ${opt} in
+    v )
+      zenity --question
+        case $? in
+          0)
+            zenity --forms --title="Create New Trade" \
+              --separator="," \
+              --add-entry="Ticker" \
+              --add-entry="Price" \
+              --add-entry="Shares" \
+              --add-entry="Stop Loss" \
+              --add-entry="Take Profit" \
+              --add-calendar="Open Date" \
+              --add-calendar="Close Date" \
+              --add-entry="Closing Price" \
+              --add-entry="Modify existing record?"
+              ;;
+            1)
+              zenity --entry \
+                --title="Search query for trade to modify" \
+                --entry-text="$(date '+%m%d%y')"
+              ;;
+          esac
+          ;;
+
     i )
       read -p "Enter ticker (Syntax for option: AMD55C011623):  " ticker
 
