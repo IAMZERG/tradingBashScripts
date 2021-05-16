@@ -1,10 +1,19 @@
 #!/bin/bash
 
+FILE=./test.csv
+
+function query_file () {
+  # searches for the query specified
+  # arg1--query string arg2--filename
+  lines=$(grep "$1" $2)
+  echo $lines
+}
+
 while getopts ":idhov" opt; do
   case ${opt} in
     v )
       zenity --question \
-        --text="Create new trade?"
+        --text="Create new trade ('no' to edit trades)?"
         case $? in
           0)
             trade=$(zenity --forms --title="Create New Trade" \
@@ -16,20 +25,17 @@ while getopts ":idhov" opt; do
               --add-entry="Take Profit" \
               --add-calendar="Open Date" \
               --add-calendar="Close Date" \
-              --add-entry="Closing Price" \
-              --add-entry="Modify existing record?")
-            echo "$trade" >> ./test.csv
+              --add-entry="Closing Price")
+              echo "$trade" >> ./test.csv
               ;;
               
           1)
-           zenity --entry \
-              --title="Search query for trade to modify" \
-              --entry-text="$(date '+%m%d%y')" query
+           query=$(zenity --entry \
+             --title="Search query for trade(s) to modify" \
+              --entry-text="$(date '+%m%d%y')")
 
-           lines=$(grep "$query" ./test.csv)
-            echo "lines: $lines"
-
-
+           lines=$(query_file $query $FILE)
+           echo $lines
               ;;
           esac
           ;;

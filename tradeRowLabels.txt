@@ -1,0 +1,8 @@
+Ticker
+Price
+Shares
+Stop Loss
+Take Profit
+Open Date
+Close Date
+Closing Price
