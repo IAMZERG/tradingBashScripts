@@ -53,15 +53,15 @@ while getopts ":idhov" opt; do
 
       read -p  "Closing Price:  " close
 
-      read -p  "Open date (MMDDYY):  " opendate
+      read -p  "Open date (MM/DD/YYYY):  " opendate
 
-      read -p  "Close date (MMDDYY):  " closedate
+      read -p  "Close date (MM/DD/YYYY):  " closedate
 
       read -p "Output file: " file
       ;;
     d )
-      closedate=$(date '+%m%d%y')
-      opendate=$(date '+%m%d%y')
+      closedate=$(date '+%m/%d/%Y')
+      opendate=$(date '+%m/%d/%Y')
       ;;
     h )
       echo " Usage:"
