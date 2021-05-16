@@ -6,9 +6,35 @@ function query_file () {
   # searches for the query specified
   # arg1--query string arg2--filename
   lines=$(grep -F "$1" $2)
-  echo $lines
+  echo "$lines"
 }
 
+function split_rows () {
+  # single argument - one line
+  # split by comma
+  local IFS=$2
+  array=()
+  for item in $0
+  do
+    array+=($item)
+  done
+  echo "$array"
+  
+}
+function new_trade () {
+
+  trade=$(zenity --forms --title="Create New Trade" \
+    --separator="," \
+    --add-entry="Ticker" \
+    --add-entry="Price" \
+    --add-entry="Shares" \
+    --add-entry="Stop Loss" \
+    --add-entry="Take Profit" \
+    --add-calendar="Open Date" \
+    --add-calendar="Close Date" \
+    --add-entry="Closing Price")
+      echo "$trade" >> ./test.csv
+}
 while getopts ":idhov" opt; do
   case ${opt} in
     v )
@@ -26,8 +52,8 @@ while getopts ":idhov" opt; do
               --add-calendar="Open Date" \
               --add-calendar="Close Date" \
               --add-entry="Closing Price")
-              echo "$trade" >> ./test.csv
-              ;;
+                          echo "$trade" >> ./test.csv
+                          ;;
               
           1)
            query=$(zenity --entry \
@@ -35,7 +61,25 @@ while getopts ":idhov" opt; do
               --entry-text="$(date '+%m/%d/%Y')")
 
            lines=$(query_file $query $FILE)
-           echo $lines
+           echo "$lines"
+           OIFS=$IFS
+           IFS='\n'
+           lines_arr=()
+           for i in $lines
+           do
+             lines_arr+=($i)
+           done
+           IFS=','
+           items_arr=()
+           for i in "${lines_arr[@]}"
+           do
+             items_arr+=($i)
+           done
+           IFS=$OIFS
+           for i in "${items_arr[@]}"
+           do
+             echo "$i"
+           done
               ;;
           esac
           ;;
