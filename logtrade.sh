@@ -5,7 +5,7 @@ FILE=./test.csv
 function query_file () {
   # searches for the query specified
   # arg1--query string arg2--filename
-  lines=$(grep "$1" $2)
+  lines=$(grep -F "$1" $2)
   echo $lines
 }
 
