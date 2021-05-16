@@ -32,7 +32,7 @@ while getopts ":idhov" opt; do
           1)
            query=$(zenity --entry \
              --title="Search query for trade(s) to modify" \
-              --entry-text="$(date '+%m%d%y')")
+              --entry-text="$(date '+%m/%d/%Y')")
 
            lines=$(query_file $query $FILE)
            echo $lines
@@ -91,4 +91,3 @@ while getopts ":idhov" opt; do
 done
 
 if [ -z  ${ticker+x} ]; then echo ""; else echo "$ticker,$price,$shares,$loss,$profit,$close,$opendate,$closedate"; fi
-
