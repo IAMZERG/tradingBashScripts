@@ -61,6 +61,7 @@ while getopts ":idhov" opt; do
               --entry-text="$(date '+%m/%d/%Y')")
 
            lines=$(query_file $query $FILE)
+           zenString=''
            echo "$lines"
            OIFS=$IFS
            IFS='\n'
@@ -78,9 +79,23 @@ while getopts ":idhov" opt; do
            IFS=$OIFS
            for i in "${items_arr[@]}"
            do
+             zenString+="$i "
              echo "$i"
            done
+
+
+          zenity --list --column="Ticker" \
+              --editable \
+              --column="Price" \
+              --column="Shares" \
+              --column="Stop Loss" \
+              --column="Take Profit" \
+              --column="Open Date" \
+              --column="Close Date" \
+              --column="Closing Price" \
+              $zenString
               ;;
+
           esac
           ;;
 
