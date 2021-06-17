@@ -21,6 +21,24 @@ function split_rows () {
   echo "$array"
   
 }
+
+function trade_list () {
+  # generate editable list of trades
+  # output is the list of trades
+  zenity --list --column="Ticker" \
+                --editable \
+                --print-column='ALL' \
+                --multiple \
+                --column="Price" \
+                --column="Shares" \
+                --column="Stop Loss" \
+                --column="Take Profit" \
+                --column="Open Date" \
+                --column="Close Date" \
+                --column="Closing Price" \
+                $@
+}
+
 function new_trade () {
 
   trade=$(zenity --forms --title="Create New Trade" \
@@ -84,16 +102,17 @@ while getopts ":idhov" opt; do
            done
 
 
-          zenity --list --column="Ticker" \
-              --editable \
-              --column="Price" \
-              --column="Shares" \
-              --column="Stop Loss" \
-              --column="Take Profit" \
-              --column="Open Date" \
-              --column="Close Date" \
-              --column="Closing Price" \
-              $zenString
+           editedTrades=$(trade_list $zenString)
+
+          echo "Edited trades: "
+          echo "$editedTrades"
+          for i in ${editedTrades[@]}
+          do
+            matches=$(grep "$i" $FILE)
+            echo "$matches"
+
+          done
+          
               ;;
 
           esac
@@ -149,4 +168,4 @@ while getopts ":idhov" opt; do
   esac
 done
 
-if [ -z  ${ticker+x} ]; then echo ""; else echo "$ticker,$price,$shares,$loss,$profit,$close,$opendate,$closedate"; fi
+#if [ -z  ${ticker+x} ]; then echo ""; else echo "$ticker,$price,$shares,$loss,$profit,$close,$opendate,$closedate"; fi
