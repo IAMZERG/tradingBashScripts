@@ -1,5 +1,3 @@
-#!/bin/bash
-
 FILE=./test.csv
 
 function query_file () {
@@ -26,20 +24,31 @@ function trade_list () {
   # generate editable list of trades
   # output is the list of trades
   zenity --list --column="Ticker" \
-                --editable \
-                --print-column='ALL' \
-                --multiple \
-                --column="Price" \
-                --column="Shares" \
-                --column="Stop Loss" \
-                --column="Take Profit" \
-                --column="Open Date" \
-                --column="Close Date" \
-                --column="Closing Price" \
-                $@
+    --separator="," \
+    --editable \
+    --print-column='ALL' \
+    --multiple \
+    --column="Price" \
+    --column="Shares" \
+    --column="Stop Loss" \
+    --column="Take Profit" \
+    --column="Open Date" \
+    --column="Close Date" \
+    --column="Closing Price" \
+    $@
 }
 
 function new_trade () {
+  # if file exists
+  if test -f "$FILE"; then
+    lines=$(wc -l $FILE)
+    linesarr=($lines)
+    id=${linesarr[0]}
+  else # if file does not exist
+    id=1
+    touch $FILE
+    echo "id,ticker,price,shares,stop loss,take profit,open date,close date,closing price" >> $FILE
+  fi
 
   trade=$(zenity --forms --title="Create New Trade" \
     --separator="," \
@@ -51,7 +60,7 @@ function new_trade () {
     --add-calendar="Open Date" \
     --add-calendar="Close Date" \
     --add-entry="Closing Price")
-      echo "$trade" >> ./test.csv
+      echo -n "$id,$trade" >> $FILE
 }
 while getopts ":idhov" opt; do
   case ${opt} in
@@ -60,16 +69,8 @@ while getopts ":idhov" opt; do
         --text="Create new trade ('no' to edit trades)?"
         case $? in
           0)
-            trade=$(zenity --forms --title="Create New Trade" \
-              --separator="," \
-              --add-entry="Ticker" \
-              --add-entry="Price" \
-              --add-entry="Shares" \
-              --add-entry="Stop Loss" \
-              --add-entry="Take Profit" \
-              --add-calendar="Open Date" \
-              --add-calendar="Close Date" \
-              --add-entry="Closing Price")
+
+            trade=$(new_trade)
                           echo "$trade" >> ./test.csv
                           ;;
               
@@ -112,6 +113,8 @@ while getopts ":idhov" opt; do
             echo "$matches"
 
           done
+
+          # TODO: create ID field to make it easy to identify the lines that have changed
           
               ;;
 
