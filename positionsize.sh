@@ -9,7 +9,7 @@ while getopts ":ls" opt; do
       ;;
 
     s )  #short trade
-      read -p "Risk size" risk
+      read -p "Risk size: " risk
       read -p "Entry (positive): " entry
       read -p "Stop (negative): " stoporder
       ;;

@@ -114,7 +114,7 @@ while getopts ":idhov" opt; do
 
           done
 
-          # TODO: create ID field to make it easy to identify the lines that have changed
+          # DONE: create ID field to make it easy to identify the lines that have changed
           
               ;;
 
